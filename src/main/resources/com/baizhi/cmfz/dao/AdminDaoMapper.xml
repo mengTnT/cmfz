@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baizhi.cmfz.dao.UserDao">
+
+    <resultMap type="com.baizhi.cmfz.entity.Admin" id="r1">
+        <result column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <collection property="list" ofType="com.baizhi.cmfz.entity.ShiroRole">
+            <result column="roleid" property="roleid"/>
+            <result column="rolename" property="rolename"/>
+        </collection>
+
+    </resultMap>
+    <resultMap type="com.baizhi.cmfz.entity.User" id="r2">
+        <result column="user_id" property="userId"/>
+        <result column="telphone" property="telphone"/>
+        <result column="password" property="password"/>
+        <result column="user_image" property="userImage"/>
+        <result column="nickname" property="nickname"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="autograph" property="autograph"/>
+        <result column="user_sheng" property="userSheng"/>
+        <result column="user_shi" property="userShi"/>
+        <result column="si_id" property="siId"/>
+
+    </resultMap>
+
+    <select id="findUserByIds" resultMap="r2">
+        select * from cmfz_user WHERE user_id IN
+        <foreach collection="array" open="(" close=")" separator=","
+                 item="id">#{id}
+        </foreach>
+    </select>
+
+    <select id="getAllUsers" resultMap="r2">
+        select * from cmfz_user
+    </select>
+
+    <insert id="addUser">
+        INSERT INTO cmfz_user VALUES (
+        0,#{telphone},#{password},#{userImage},#{nickname},#{name},#{sex},#{autograph},#{userSheng},#{userShi},#{siId}
+        )
+    </insert>
+
+
+    <!-- 登陆 -->
+    <select id="login" resultMap="r1">
+		select * from cmfz_admin
+		where
+		username=#{username} and password=#{password}
+	</select>
+
+    <select id="selectByName" resultMap="r1">
+		select * from cmfz_admin
+		where
+		username=#{username}
+	</select>
+
+    <select id="getAllAdmin" resultMap="r1">
+		SELECT t3.id,t3.username,t3.`password`,t3.salt,t4.roleid,t4.rolename FROM(SELECT t1.id,t1.username,t1.`password`,t1.salt,t2.roleid FROM cmfz_admin t1
+       LEFT JOIN shiro_amdin_role t2
+        ON t1.username=t2.username)t3
+       LEFT JOIN shiro_role t4
+       ON t3.roleid=t4.roleid
+	</select>
+
+    <select id="getAdminByName" resultMap="r1">
+       SELECT * FROM(SELECT t3.id,t3.username,t3.`password`,t3.salt,t4.roleid,t4.rolename FROM(SELECT t1.id,t1.username,t1.`password`,t1.salt,t2.roleid FROM cmfz_admin t1
+LEFT JOIN shiro_amdin_role t2
+ON t1.username=t2.username)t3
+LEFT JOIN shiro_role t4
+ON t3.roleid=t4.roleid) t5
+where username=#{username}
+    </select>
+    <insert id="addAdmin">
+        INSERT INTO cmfz_admin VALUES (0,#{username},#{password},'6666')
+    </insert>
+
+    <update id="updateAdmin">
+   update cmfz_admin set password=#{password}
+   where id=#{id}
+
+    </update>
+
+    <delete id="deleteByName">
+        DELETE FROM cmfz_admin
+        WHERE username=#{username}
+
+    </delete>
+
+</mapper>

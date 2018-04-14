@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baizhi.cmfz.dao.BannerDao">
+    <resultMap type="com.baizhi.cmfz.entity.Banner" id="r2">
+        <result column="banner_id" property="bannerId"/>
+        <result column="banner_image" property="bannerImage"/>
+        <result column="banner_name" property="bannerName"/>
+        <result column="banner_num" property="bannerNum"/>
+        <result column="banner_state" property="bannerState"/>
+
+    </resultMap>
+
+
+    <select id="getAllBanner" resultMap="r2">
+		select * from cmfz_banner
+		 LIMIT #{start},#{rows}
+	</select>
+    <select id="getTotal" resultType="int">
+        select count(*) from cmfz_banner
+    </select>
+
+    <insert id="addBanner">
+		insert into cmfz_banner values (0,#{bannerImage},#{bannerName},0,#{bannerState})
+
+	</insert>
+
+    <delete id="deleteBanner">
+        delete from cmfz_banner
+        where banner_id in
+        <foreach collection="array" open="(" close=")" separator=","
+                 item="id">#{id}
+        </foreach>
+    </delete>
+
+    <update id="updateBanner">
+
+        update cmfz_banner
+            set
+            banner_image=#{bannerImage},banner_name=#{bannerName},banner_num=#{bannerNum},banner_state=#{bannerState}
+
+        where banner_id=#{bannerId}
+    </update>
+
+
+</mapper>

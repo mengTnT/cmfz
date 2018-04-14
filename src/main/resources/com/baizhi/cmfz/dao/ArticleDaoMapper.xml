@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baizhi.cmfz.dao.ArticleDao">
+    <resultMap type="com.baizhi.cmfz.entity.Article" id="r2">
+        <result column="wz_id" property="articleId"/>
+        <result column="wz_name" property="articleName"/>
+        <result column="wz_image" property="articleImage"/>
+        <result column="wz_content" property="articleContent"/>
+        <result column="wz_date" property="articleDate"/>
+        <result column="wz_count" property="articleCount"/>
+        <association property="guru" javaType="com.baizhi.cmfz.entity.Guru">
+            <result column="si_id" property="siId"/>
+            <result column="si_name" property="siName"/>
+            <result column="si_image" property="siImage"/>
+            <result column="si_nickname" property="siNickname"/>
+        </association>
+    </resultMap>
+
+    <select id="getTotal" resultType="int">
+		select count(*) from cmfz_si_wen
+	</select>
+
+    <select id="showAllArticle" resultMap="r2">
+		select t1.*,t2.si_name from cmfz_si_wen t1
+        LEFT JOIN cmfz_si t2
+        on t1.si_id=t2.si_id
+	</select>
+    <insert id="addArticle">
+        insert into cmfz_si_wen
+        values (UUID(),#{articleName},#{articleImage},#{articleContent},#{guru.siId},SYSDATE(),0)
+    </insert>
+    <update id="updateArticle">
+    update cmfz_si_wen
+    set wz_name=#{articleName},wz_image=#{articleImage},wz_content=#{articleContent},si_id=#{guru.siId}
+    where wz_id=#{articleId}
+
+    </update>
+
+    <delete id="deleteArticle">
+        delete from cmfz_si_wen where wz_id in
+        <foreach collection="array" open="(" close=")" separator=","
+                 item="id">#{id}
+        </foreach>
+    </delete>
+
+
+</mapper>

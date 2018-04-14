@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baizhi.cmfz.dao.RoleManagerDao">
+    <resultMap type="com.baizhi.cmfz.entity.ShowRoleResourseDTO" id="r1">
+        <result column="roleid" property="roleid"/>
+        <result column="rolename" property="rolename"/>
+
+        <collection property="list" ofType="com.baizhi.cmfz.entity.Resourse">
+            <result column="id" property="id"/>
+            <result column="resname" property="resname"/>
+        </collection>
+
+    </resultMap>
+
+    <resultMap id="resMap" type="com.baizhi.cmfz.entity.Tree">
+        <result property="id" column="id"/>
+        <result property="text" column="resname"/>
+    </resultMap>
+
+    <!--private  int id;-->
+    <!--private String resname;-->
+    <!--private String resurl;-->
+    <!--private String restype;-->
+    <!--private String rescode;-->
+    <!--private int parent_id;-->
+
+    <select id="showRoleResourse" resultMap="r1">
+		SELECT t3.*,t4.* FROM(SELECT t1.*,t2.resid FROM shiro_role t1
+LEFT JOIN shiro_role_resource t2
+ON t1.rolename=t2.rolename) t3
+LEFT JOIN shiro_resource t4
+ON t3.resid=t4.id
+	</select>
+
+    <!--查询通过中间表 查询顶级资源（一级资源）-->
+    <select id="selcetParentResByShiroRoleName" resultMap="resMap">
+        SELECT DISTINCT s2.* from shiro_role_resource s1 RIGHT JOIN shiro_resource s2
+        on s2.id = s1.resid
+        where s1.rolename in
+        <foreach collection="roles" open="(" separator="," close=")" item="role">
+            #{role.rolename}
+        </foreach>
+        and s2.parent_id is null
+    </select>
+
+    <!--根据中间查询不确定节点资源-->
+    <select id="selcetSonResByRoleName" resultMap="resMap">
+        SELECT DISTINCT s2.* from shiro_role_resource s1 RIGHT JOIN shiro_resource s2
+        on s2.id = s1.resid
+        where s1.rolename in
+        <foreach collection="roles" open="(" separator="," close=")" item="role">
+            #{role.rolename}
+        </foreach>
+        and s2.parent_id=#{parentId}
+    </select>
+
+
+</mapper>

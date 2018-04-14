@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.cmfz.dao.ShiroRoleResourceMapper" >
+  <resultMap id="BaseResultMap" type="com.baizhi.cmfz.entity.ShiroRoleResource" >
+    <id column="role_resid" property="roleResid" jdbcType="INTEGER" />
+    <result column="rolename" property="rolename" jdbcType="VARCHAR" />
+    <result column="resid" property="resid" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from shiro_role_resource
+    where role_resid = #{roleResid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByRoleName">
+    delete from shiro_role_resource
+    where rolename = #{rolename}
+  </delete>
+
+  <insert id="insert">
+    insert into shiro_role_resource (role_resid, rolename, resid
+      )
+    values (0, #{rolename,jdbcType=VARCHAR}, #{resid,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.baizhi.cmfz.entity.ShiroRoleResource" >
+    update shiro_role_resource
+    set rolename = #{rolename,jdbcType=VARCHAR},
+      resid = #{resid,jdbcType=INTEGER}
+    where role_resid = #{roleResid,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select role_resid, rolename, resid
+    from shiro_role_resource
+    where role_resid = #{roleResid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select role_resid, rolename, resid
+    from shiro_role_resource
+  </select>
+</mapper>

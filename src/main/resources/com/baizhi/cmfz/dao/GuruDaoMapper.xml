@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baizhi.cmfz.dao.GuruDao">
+	<resultMap type="com.baizhi.cmfz.entity.Guru" id="r1">
+		<result column="si_id" property="siId" />
+		<result column="si_name" property="siName" />
+		<result column="si_image" property="siImage" />
+		<result column="si_nickname" property="siNickname" />
+
+	</resultMap>
+
+
+	<select id="getGuru" resultMap="r1">
+		select * from cmfz_si
+	</select>
+
+
+
+</mapper>

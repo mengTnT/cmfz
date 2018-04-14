@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.cmfz.dao.ShiroAmdinRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.baizhi.cmfz.entity.ShiroAmdinRole" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="roleid" property="roleid" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from shiro_amdin_role
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <!--//根据名字删除多个-->
+  <delete id="deleteShiroAmdinRoleByName">
+    delete from shiro_amdin_role
+    where username =#{username}
+  </delete>
+  <insert id="insert" parameterType="com.baizhi.cmfz.entity.ShiroAmdinRole" >
+    insert into shiro_amdin_role (id, username, roleid
+      )
+    values (0, #{username,jdbcType=VARCHAR}, #{roleid,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.baizhi.cmfz.entity.ShiroAmdinRole" >
+    update shiro_amdin_role
+    set username = #{username,jdbcType=VARCHAR},
+      roleid = #{roleid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select id, username, roleid
+    from shiro_amdin_role
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, username, roleid
+    from shiro_amdin_role
+  </select>
+</mapper>

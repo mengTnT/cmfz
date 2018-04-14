@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.baizhi.cmfz.dao.ResourseDao">
+    <resultMap id="r1" type="com.baizhi.cmfz.entity.Tree">
+        <result property="id" column="pid"/>
+        <result property="text" column="pname"/>
+        <collection property="children" ofType="com.baizhi.cmfz.entity.Tree">
+            <result property="id" column="id"/>
+            <result property="text" column="resname"/>
+            <result property="resurl" column="resurl"/>
+
+        </collection>
+
+    </resultMap>
+    <resultMap id="r2" type="com.baizhi.cmfz.entity.Tree">
+        <result property="id" column="pid"/>
+        <result property="text" column="pname"/>
+        <collection property="children" ofType="com.baizhi.cmfz.entity.Tree">
+            <result property="id" column="cid"/>
+            <result property="text" column="resname"/>
+        </collection>
+
+    </resultMap>
+
+
+    <select id="selectAll" resultMap="r1">
+		select t1.id pid,t1.resname pname,t1.restype ptype,t2.* from shiro_resource t1
+INNER JOIN  shiro_resource t2
+on t1.id=t2.parent_id
+	</select>
+
+    <select id="selectByRoleName" resultMap="r2">
+SELECT t7.* FROM(SELECT t5.*,t6.id cid,t6.resname FROM(SELECT t3.rolename,t4.id pid,t4.resname pname FROM(SELECT t1.*,t2.resid FROM shiro_role t1
+LEFT JOIN shiro_role_resource t2
+ON t1.rolename=t2.rolename) t3
+LEFT JOIN shiro_resource t4
+ON t3.resid=t4.id) t5
+INNER JOIN  shiro_resource t6
+ON t5.pid=t6.parent_id) t7
+WHERE t7.rolename=#{rolename}
+
+    </select>
+
+
+</mapper>
